@@ -37,47 +37,68 @@
         <table class="tbl-full">
             <tr>
                 <th>S.N.</th>
-                <th>Full Name</th>
-                <th>username</th>
-                <th>actions</th>
+                <th>Title</th>
+                <th>Image</th>
+                <th>Featured</th>
+                <th>Active</th>
+                <th>Actions</th>
             </tr>
             <?php
-            $sql = "SELECT * FROM tbl_admin";
+            $sql = "SELECT * FROM tbl_category";
             $res = mysqli_query($conn, $sql);
-
-            if ($res == TRUE) {
-                $count = mysqli_num_rows($res);
-                $sn = 1;
-                if ($count > 0) {
-                    while ($rows = mysqli_fetch_assoc($res)) {
-                        $id = $rows['id'];
-                        $full_name = $rows['full_name'];
-                        $username = $rows['username'];
-
-                        ?>
+            $count = mysqli_num_rows($res);
+            $sn=1;
+            if($count>0){
+                while($row = mysqli_fetch_assoc($res))
+                {
+                    $id = $row['id'];
+                    $title = $row['title'];
+                    $image_name = $row['image_name'];
+                    $featured = $row['featured'];
+                    $active = $row['active'];
+                    ?>
                         <tr>
                             <td>
                                 <?php echo $sn++ . '->'; ?>
                             </td>
                             <td>
-                                <?php echo $full_name . '🙂'; ?>
+                                <?php echo $title; ?>
                             </td>
                             <td>
-                                <?php echo $username; ?>
+                                <?php 
+                                    if($image_name!=""){
+                                        ?>
+                                        <img src="<?php echo SITEURL;?>images/category/<?php echo $image_name;?>" width="40px">
+                                        <?php
+                                    }
+                                    else{
+                                        echo "<div class='error'>Image Not Added</div>";
+                                    }
+                                ?>
                             </td>
                             <td>
-                                <a href="<?php echo SITEURL; ?>admin/update-password.php?id=<?php echo $id; ?>"
-                                    class="btn-primary">Change Password</a>
-                                <a href="<?php echo SITEURL; ?>admin/update-admin.php?id=<?php echo $id; ?>"
-                                    class="btn-secondary">Update Admin</a>
-                                <a href="<?php echo SITEURL; ?>admin/delete-admin.php?id=<?php echo $id; ?>" class="btn-danger">Delete
-                                    Admin</a>
+                                <?php echo $featured; ?>
+                            </td>
+                            <td>
+                                <?php echo $active; ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id; ?>"
+                                    class="btn-secondary">Update Category</a>
+                                <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>" class="btn-danger">Delete
+                                    Category</a>
                             </td>
                         </tr>
 
                         <?php
-                    }
                 }
+            }
+            else{
+                ?>
+                <tr>
+                    <td colspan="6"><div class="error">No Category Added.</div></td>
+                </tr>
+            <?php
             }
             ?>
         </table>
